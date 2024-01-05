@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "example(_:_:):ScenesToFunctionDispatch.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HelloWorldTemperate:CallTraceCode.c">
+      </ContextState>
+      <ContextState
+         contextName = "NotificationController.addObserver(_:selector:name:runloop:object:):NotificationController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "example(_:):ScenesToFunctionDispatch.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "input.endIndex">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ScenesToCall init]:ScenesToCall.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self valueForKey:@&quot;age&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "NSNotificationCenter.notificationController.setter:NotificationController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "NotificationController.matchController(_:name:):NotificationController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
