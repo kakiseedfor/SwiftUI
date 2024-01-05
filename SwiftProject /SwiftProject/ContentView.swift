@@ -19,7 +19,6 @@ struct ContentView: View {
     var body: some View {
         LandMarkTabView().onAppear {
             Self.source.activate()
-            echoResult()
         }
     }
 }

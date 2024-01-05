@@ -8,16 +8,15 @@
 import Foundation
 import SwiftFramework
 
-var tmpCallTraceManager: CallTraceManager?
+let tmpCallTraceManager: CallTraceManager = CallTraceManager()
 
 class CallTraceManager: NSObject {
     deinit {
         print("CallTraceManager : \(#function)")
     }
     
-    override init() {
-        super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(CallTraceManager.notificationAction(_:)), name: .CallTraceDidFinishNotification, runloop: RunLoop.current, object: nil)
+    func addNotifity() {
+        NotificationCenter.default.addObserver(self, selector: #selector(CallTraceManager.notificationAction(_:)), name: .CallTraceDidFinishNotification, runloop: .main, object: nil)
     }
     
     @objc func notificationAction(_ notification: Notification) {
@@ -29,7 +28,7 @@ class CallTraceManager: NSObject {
 
 @objc extension CallTraceManager {
     class func callTrace() {
-        tmpCallTraceManager = CallTraceManager()
+        tmpCallTraceManager.addNotifity()
         DispatchQueue(label: "com.kaki.thread").async {
             CallTrace()
         }

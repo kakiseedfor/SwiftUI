@@ -13,3 +13,7 @@ struct SwiftProjectApp: App {
         WindowGroup { ContentView() }
     }
 }
+
+#Preview(body: {
+    ContentView()
+})

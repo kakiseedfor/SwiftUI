@@ -25,6 +25,7 @@ public func CallTrace() {
     
     for i in 0 ..< count {
         let thread: thread_act_t? = threads?[Int(i)]
+        tmpString.append("----------------------------------------------------------------------------------\n")
         tmpString.append(stackOfThread(thread))
     }
     

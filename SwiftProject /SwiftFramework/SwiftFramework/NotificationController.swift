@@ -8,9 +8,12 @@
 import Foundation
 
 extension NSMachPort {
+    var keyPointer: UnsafePointer<CallTraceKey> {
+        withUnsafePointer(to: &CallTraceKey.notificationController) { $0 }
+    }
     var notification: Notification? {
-        get { objc_getAssociatedObject(self, &CallTraceKey.notification) as? Notification }
-        set { objc_setAssociatedObject(self, &CallTraceKey.notification, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN) }
+        get { objc_getAssociatedObject(self, keyPointer) as? Notification }
+        set { objc_setAssociatedObject(self, keyPointer, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
 }
 
@@ -69,16 +72,22 @@ class NotificationPortController: NSObject {
         controller = aController
     }
     
-    func addObserver(_ aObserver: AnyObject, selector aSelector: Selector, name aName: NSNotification.Name?, runloop aRunloop: RunLoop?, object anObject: Any?){
-        NotificationCenter.default.removeObserver(self, name: aName, object: anObject)
+    func addObserver(_ aObserver: AnyObject, selector aSelector: Selector, name aName: NSNotification.Name?, runloop aRunloop: RunLoop?, object anObject: Any?)
+    {
+        if targetMatch?.runloop != aRunloop {
+            targetMatch = NotificationMatch<NotificationPortController>(aRunloop, self)
+        }
         
-        targetMatch = NotificationMatch<NotificationPortController>(aRunloop, self)
-        observer = aObserver
         selector = aSelector
+        if let tmpObserver = observer, ObjectIdentifier(tmpObserver) == ObjectIdentifier(aObserver) && name == aName {
+            return
+        }
+        
+        observer = aObserver
         object = anObject
         name = aName
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationCallback(_:)), name: aName, object: anObject)
+        NotificationCenter.default.removeObserver(self, name: name, object: object)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationCallback(_:)), name: name, object: object)
     }
     
     func handleMachMessage(_ notification: Notification) {
@@ -111,12 +120,12 @@ class NotificationController {
     var notificationPortController: [NotificationPortController] = [NotificationPortController]()
     
     func addObserver(_ aObserver: AnyObject, selector aSelector: Selector, name aName: NSNotification.Name?, runloop aRunloop: RunLoop?, object anObject: Any?) {
-        let controllers: [NotificationPortController]? = matchController(aObserver, name: aName)
-        var tmpController: NotificationPortController? = controllers?.first
+        var tmpController: NotificationPortController? = matchController(aObserver, name: aName)?.first
         if tmpController == nil {
             tmpController = NotificationPortController(self)
             appendController(tmpController!)
         }
+        
         tmpController!.addObserver(aObserver, selector: aSelector, name: aName, runloop: aRunloop, object: anObject)
     }
     
@@ -128,10 +137,8 @@ class NotificationController {
     
     /// 实际只会返回1个
     func matchController(_ aObserver: AnyObject, name aName: NSNotification.Name?) -> [NotificationPortController]? {
-        notificationPortController.filter {
-            return $0.observer != nil
-        }.compactMap{
-            if ObjectIdentifier(aObserver) == ObjectIdentifier($0.observer!) && $0.name == aName {
+        notificationPortController.compactMap {
+            if let tmpObserver = $0.observer, ObjectIdentifier(tmpObserver) == ObjectIdentifier(aObserver) && $0.name == aName {
                 return $0
             }
             return nil
@@ -146,10 +153,11 @@ class NotificationController {
 extension NotificationCenter {
     var notificationController: NotificationController {
         get {
-            var tmpController: NotificationController? = objc_getAssociatedObject(self, &CallTraceKey.notificationController) as? NotificationController
+            let keyPointer: UnsafePointer<CallTraceKey> = withUnsafePointer(to: &CallTraceKey.notificationController) { $0 }
+            var tmpController: NotificationController? = objc_getAssociatedObject(self, keyPointer) as? NotificationController
             if tmpController == nil {
-                objc_setAssociatedObject(self, &CallTraceKey.notificationController, NotificationController(), objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
-                tmpController = objc_getAssociatedObject(self, &CallTraceKey.notificationController) as? NotificationController
+                tmpController = NotificationController()
+                objc_setAssociatedObject(self, keyPointer, tmpController, .OBJC_ASSOCIATION_RETAIN)
             }
             return tmpController!
         }

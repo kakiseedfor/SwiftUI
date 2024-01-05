@@ -12,7 +12,6 @@
 
 + (void)callTrace {
     [CallTraceManager callTrace];
-//    [ScenesToCallOne performSelector:@selector(callTraceHello)];
 }
 
 @end

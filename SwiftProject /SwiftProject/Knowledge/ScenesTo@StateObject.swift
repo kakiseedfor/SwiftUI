@@ -15,37 +15,25 @@ struct LandMarkTabView: View {
      */
     @StateObject var landmarkHomeModel: LandmarkHomeModel = LandmarkHomeModel()
     @State var selectedIndex: Int = appStorages.tabSelection
-    static var index: Int = -1
     
     var body: some View {
         TabView(selection: $selectedIndex) {
-            ForEach(landmarkHomeModel.landmarkModels, id: \.title) { landmarkModel in
-                startIndex(landmarkModel)
-            }
-            .onAppear {
-                Self.index = 0
+            ForEach(Array(landmarkHomeModel.landmarkModels.enumerated()), id: \.1.title) { index, landmarkModel in
+                LandmarkNavgation()
+                    .environmentObject(landmarkModel)
+                    .tabItem {
+                        Label(landmarkModel.title, systemImage: landmarkModel.tabImgName)
+                    }
+                    .tag(index)
+                    .onAppear {
+                        appStorages.tabSelection = selectedIndex
+                        ScenesToCall.callTrace()
+                    }
             }
         }
         .onAppear {
             landmarkHomeModel.loadData()
         }
-    }
-    
-    func startIndex(_ landmarkModel: LandmarkModel) -> some View {
-        Self.index += 1
-        return loadNavgation(landmarkModel)
-    }
-    
-    func loadNavgation(_ landmarkModel: LandmarkModel) -> some View {
-        LandmarkNavgation()
-            .environmentObject(landmarkModel)
-            .tabItem {
-                Label(landmarkModel.title, systemImage: landmarkModel.tabImgName)
-            }
-            .tag(Self.index)
-            .onAppear {
-                appStorages.tabSelection = selectedIndex
-            }
     }
 }
 
