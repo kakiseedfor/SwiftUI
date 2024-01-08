@@ -77,23 +77,34 @@ struct LandmarkSubList: View {
 }
 
 struct LandmarkListSection<Content: View>: View {
-    @State var headerSize: CGSize = CGSize(width: 414.0, height: 28.0)
+    @State var headerSize: CGSize = .zero
     @State var footererSize: CGSize = .zero
     @TypeWrapper var title: String!
     @ViewBuilder var content: () -> Content
     
     var body: some View {
         Section(content: content) {
-            Text(title)
-                .foregroundColor(.secondary)
-                .frame(width: headerSize.width, height: headerSize.height, alignment: .leading)
-                .readSize($footererSize)
-                .offset(x: 16.0)
-                .background {
-                    colorFromHex(0xFFFFFF)
+            ZStack {
+                GeometryReader { geometryProxy in
+                    Color.indigo.onAppear {
+                        headerSize = geometryProxy.size
+                    }
                 }
+                
+                Text(title)
+                    .foregroundColor(.secondary)
+                    .background {
+                        colorFromHex(0xFFFFFF)
+                    }
+            }
         } footer: {
             ZStack {
+                GeometryReader { geometryProxy in
+                    Color.blue.onAppear {
+                        footererSize = geometryProxy.size
+                    }
+                }
+                
                 VStack {
                     Divider()
                 }
