@@ -30,12 +30,6 @@ extension View {
     }
 }
 
-extension Image {
-    func readSize(_ size: Binding<CGSize>) -> some View {
-        modifier(ImageModifiers(size: size))
-    }
-}
-
 private struct ViewModifiers: ViewModifier {
     @Binding var size: CGSize
     
@@ -46,39 +40,11 @@ private struct ViewModifiers: ViewModifier {
     func body(content: Content) -> some View {
         content.background {
             GeometryReader { geometryProxy in
-                readSize(geometryProxy)
+                Color.clear.onAppear {
+                    size = geometryProxy.size
+                }
             }
         }
-    }
-    
-    func readSize(_ geometryProxy: GeometryProxy) -> some View {
-        DispatchQueue.main.async {
-            size = geometryProxy.size
-        }
-        return Color.clear
-    }
-}
-
-private struct ImageModifiers: ViewModifier {
-    @Binding var size: CGSize
-    
-    init(size tmpSize: Binding<CGSize> = .constant(.zero)) {
-        _size = tmpSize
-    }
-    
-    func body(content: Content) -> some View {
-        content.background {
-            GeometryReader { geometryProxy in
-                readSize(geometryProxy)
-            }
-        }
-    }
-    
-    func readSize(_ geometryProxy: GeometryProxy) -> some View {
-        DispatchQueue.main.async {
-            size = geometryProxy.size
-        }
-        return Color.clear
     }
 }
 
