@@ -79,7 +79,6 @@ struct LandmarkSubList: View {
 struct LandmarkListSection<Content: View>: View {
     @State var headerSize: CGSize = .zero
     @State var footererSize: CGSize = .zero
-    @State var tt: CGSize = .zero
     @TypeWrapper var title: String!
     @ViewBuilder var content: () -> Content
     
@@ -93,20 +92,18 @@ struct LandmarkListSection<Content: View>: View {
                     .background {
                         colorFromHex(0xFFFFFF)
                     }
+                    .frame(width: headerSize.width, height: headerSize.height)
             }
             .readSize($headerSize)
         } footer: {
             ZStack {
-                GeometryReader { geometryProxy in
-                    Color.clear.onAppear {
-                        footererSize = geometryProxy.size
-                    }
-                }
+                Color.clear
                 
                 Divider()
-                .background {
-                    Color.blue.frame(width: footererSize.width, height: footererSize.height)
-                }
+                    .frame(width: footererSize.width, height: footererSize.height)
+                    .background {
+                        Color.blue
+                    }
                 
                 Text("The \(title.lowercased()) end line")
                     .foregroundColor(.secondary)
@@ -116,6 +113,7 @@ struct LandmarkListSection<Content: View>: View {
                         Color.blue
                     }
             }
+            .readSize($footererSize)
         }
         .listRowInsets(EdgeInsets())
         .listSectionSeparator(.hidden)
