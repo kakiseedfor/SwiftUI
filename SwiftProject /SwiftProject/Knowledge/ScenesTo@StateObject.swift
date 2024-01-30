@@ -18,7 +18,7 @@ struct LandMarkTabView: View {
     
     var body: some View {
         TabView(selection: $selectedIndex) {
-            ForEach(Array(landmarkHomeModel.landmarkModels.enumerated()), id: \.1.title) { index, landmarkModel in
+            ForEach(Array(landmarkHomeModel.landmarkModels.enumerated()), id: \.element.title) { index, landmarkModel in
                 LandmarkNavgation()
                     .environmentObject(landmarkModel)
                     .tabItem {
