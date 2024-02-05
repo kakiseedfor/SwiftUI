@@ -11,26 +11,10 @@ struct LandmarkNavgation: View {
     @EnvironmentObject var landmarkModel: LandmarkModel
     
     var body: some View {
-        NavigationView {
-            if let _ = landmarkModel.landmarkModels {
-                LandmarkTotalList()
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text(landmarkModel.title)
-                                .fontWeight(.semibold)
-                        }
-                    }
-            } else {
-                LandmarkList()
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text(landmarkModel.title)
-                                .fontWeight(.semibold)
-                        }
-                    }
-            }
+        if let _ = landmarkModel.landmarkModels {
+            LandmarkTotalList()
+        } else {
+            LandmarkList()
         }
     }
 }

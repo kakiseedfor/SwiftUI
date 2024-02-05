@@ -19,7 +19,7 @@ struct LandmarkMapView: View {
                 MapAnnotationImage(imageName: imageName)
             }
         }
-            .onAppear {
+            .onceOnAppear {
                 setRegion(coordinate)
             }
     }
@@ -59,7 +59,7 @@ struct LandmarkMapView: View {
                             .scaleEffect(animationToggle ? 1.0 : 2.0)
                             .opacity(animationToggle ? 1.0 : 0.0)
                     }
-                    .onAppear {
+                    .onceOnAppear {
                         withAnimation(.easeOut(duration: 3.0).repeatForever(autoreverses: false)) {
                             animationToggle.toggle()
                         }

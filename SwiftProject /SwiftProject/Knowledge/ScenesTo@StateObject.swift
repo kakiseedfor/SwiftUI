@@ -15,6 +15,9 @@ struct LandMarkTabView: View {
      */
     @StateObject var landmarkHomeModel: LandmarkHomeModel = LandmarkHomeModel()
     @State var selectedIndex: Int = appStorages.tabSelection
+    var navTitle: String {
+        landmarkHomeModel.landmarkModels.isEmpty ? "" : landmarkHomeModel.landmarkModels[selectedIndex].title
+    }
     
     var body: some View {
         TabView(selection: $selectedIndex) {
@@ -25,13 +28,15 @@ struct LandMarkTabView: View {
                         Label(landmarkModel.title, systemImage: landmarkModel.tabImgName)
                     }
                     .tag(index)
-                    .onAppear {
+                    .onceOnAppear {
                         appStorages.tabSelection = selectedIndex
                         ScenesToCall.callTrace()
                     }
             }
         }
-        .onAppear {
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(navTitle)
+        .onceOnAppear {
             landmarkHomeModel.loadData()
         }
     }
