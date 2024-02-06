@@ -28,7 +28,7 @@ struct LandmarkTotalList: View {
                 LandmarkSubList(landmarkModel: subLandmarkModel)
             }
         }
-        .listStyle(.plain)
+        .listStyle(.grouped)
     }
 }
 
@@ -39,7 +39,7 @@ struct LandmarkList: View {
         List {
             LandmarkSubList(landmarkModel: landmarkModel)
         }
-        .listStyle(.plain)
+        .listStyle(.grouped)
     }
 }
 
@@ -100,6 +100,7 @@ struct LandmarkListSection<Content: View>: View {
             .readSize($footererSize)
         }
         .listRowInsets(EdgeInsets())
+        .listRowSeparator(.hidden)
         .listSectionSeparator(.hidden)
     }
 }
