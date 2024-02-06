@@ -17,7 +17,7 @@ struct ContentView: View {
     }()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             LandMarkTabView().onceOnAppear {
                 Self.source.activate()
             }

@@ -16,7 +16,7 @@ struct LandmarkMapView: View {
     init(coordinate: LandmarkDataCoordinates, imageName: String) {
         self.region = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-            span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         )
         self.coordinate = coordinate
         self.imageName = imageName
