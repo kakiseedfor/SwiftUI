@@ -9,9 +9,18 @@ import SwiftUI
 import MapKit
 
 struct LandmarkMapView: View {
-    @State private var region = MKCoordinateRegion()
+    @State var region: MKCoordinateRegion
     var coordinate: LandmarkDataCoordinates
     var imageName: String
+    
+    init(coordinate: LandmarkDataCoordinates, imageName: String) {
+        self.region = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+            span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+        )
+        self.coordinate = coordinate
+        self.imageName = imageName
+    }
 
     var body: some View {
         Map(coordinateRegion: $region, annotationItems: [AnnotationItem(latitude: coordinate.latitude, longitude: coordinate.longitude)]) {
@@ -19,16 +28,6 @@ struct LandmarkMapView: View {
                 MapAnnotationImage(imageName: imageName)
             }
         }
-            .onceOnAppear {
-                setRegion(coordinate)
-            }
-    }
-
-    private func setRegion(_ coordinate: LandmarkDataCoordinates) {
-        region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-            span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
-        )
     }
     
     struct AnnotationItem: Identifiable {
