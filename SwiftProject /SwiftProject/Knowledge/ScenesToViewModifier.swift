@@ -17,11 +17,11 @@ extension View {
             .modifier(ScrollOffsetModifiers(scrollOffset: scrollOffset))
     }
     
-    func colorFromHex(_ hex: String) -> some View {
+    func colorFromHex(_ hex: String) -> Color {
         colorFromHex(Int(hex) ?? 0x000000)
     }
     
-    func colorFromHex(_ hex: Int) -> some View {
+    func colorFromHex(_ hex: Int) -> Color {
         Color(.sRGB,
               red: Double((hex & 0xFF0000) >> 16) / 255.0,
               green: Double((hex & 0xFF00) >> 8) / 255.0,

@@ -21,6 +21,8 @@ struct ContentView: View {
             LandMarkTabView().onceOnAppear {
                 Self.source.activate()
             }
+            .toolbarBackground(colorFromHex(0xFFFFFF))
+            .toolbarBackground(.visible)
         }
     }
 }

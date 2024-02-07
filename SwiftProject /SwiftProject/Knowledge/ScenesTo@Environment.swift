@@ -51,6 +51,8 @@ struct LandmarkSubList: View {
             ForEach(landmarkModel.landmarkDatas ?? [], id: \.id) { landmarkData in
                 LandmarkListRow(destination: {
                     LandMarkDetailView(landmarkData: landmarkData)
+                        .toolbarBackground(colorFromHex(0xFFFFFF))
+                        .toolbarBackground(.visible)
                 }, landmarkData: landmarkData)
             }
             .onDelete {
