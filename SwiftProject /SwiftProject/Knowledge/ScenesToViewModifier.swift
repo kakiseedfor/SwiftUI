@@ -46,6 +46,7 @@ private struct ViewSizeModifiers: ViewModifier {
             GeometryReader { geometryProxy in
                 Color.clear.onAppear {
                     size = geometryProxy.size
+                    print("\(size)")
                 }
             }
         }

@@ -71,14 +71,14 @@ struct LandmarkListSection<Content: View>: View {
     var body: some View {
         Section(content: content) {
             ZStack {
-                Color.indigo
+                Color.clear
                 
                 Text(title)
                     .foregroundColor(.secondary)
                     .background {
-                        colorFromHex(0xFFFFFF)
+                        Color.indigo
+                            .frame(width: headerSize.width, height: headerSize.height)
                     }
-                    .frame(width: headerSize.width, height: headerSize.height)
             }
             .readSize($headerSize)
         } footer: {
