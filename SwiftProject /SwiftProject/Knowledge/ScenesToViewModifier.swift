@@ -13,7 +13,7 @@ extension View {
     }
     
     func readScrollOffset(_ scrollOffset: Binding<CGRect>) -> some View {
-        coordinateSpace(name: ScrollOffsetModifiers.nameSpace)
+        coordinateSpace(name: CoordinateSpace.global)
             .modifier(ScrollOffsetModifiers(scrollOffset: scrollOffset))
     }
     
@@ -46,7 +46,6 @@ private struct ViewSizeModifiers: ViewModifier {
             GeometryReader { geometryProxy in
                 Color.clear.onAppear {
                     size = geometryProxy.size
-                    print("\(size)")
                 }
             }
         }
@@ -75,7 +74,6 @@ private struct ViewAppearModifiers: ViewModifier {
 
 struct ScrollOffsetModifiers: ViewModifier {
     @Binding var scrollOffset: CGRect
-    static var nameSpace = "SCROLLOFFSET"
     
     init(scrollOffset tmpScrollOffset: Binding<CGRect> = .constant(.zero)) {
         _scrollOffset = tmpScrollOffset
@@ -91,7 +89,7 @@ struct ScrollOffsetModifiers: ViewModifier {
     
     func readScrollOffset(_ geometryProxy: GeometryProxy) -> some View {
         DispatchQueue.main.async {
-            scrollOffset = geometryProxy.frame(in: .named(Self.nameSpace))
+            scrollOffset = geometryProxy.frame(in: .global)
         }
         return Color.clear
     }
